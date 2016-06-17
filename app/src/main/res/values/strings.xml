@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Travel and Co</string>
+    <string name="created_by">Created By Stan Maeyens</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="money_list">Money</string>
+    <string name="luggage_list">Luggage</string>
+    <string name="todo_list">To Do</string>
+    <string name="map">Map</string>
+
+    <string name="no_transactions">You didn\'t add any transactions</string>
+</resources>
