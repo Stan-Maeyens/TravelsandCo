@@ -1,4 +1,4 @@
-package com.maeyens.stan.travelsandco;
+package com.maeyens.stan.travelsandco.money;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.maeyens.stan.travelsandco.R;
 import com.maeyens.stan.travelsandco.data.Transaction;
 
 import java.util.List;

@@ -1,8 +1,5 @@
-package com.maeyens.stan.travelsandco;
+package com.maeyens.stan.travelsandco.money;
 
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -12,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
+import com.maeyens.stan.travelsandco.R;
 import com.maeyens.stan.travelsandco.data.DummyDAO;
 import com.maeyens.stan.travelsandco.data.Transaction;
 import com.maeyens.stan.travelsandco.data.TravelsandCoDAO;

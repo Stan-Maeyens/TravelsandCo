@@ -1,7 +1,9 @@
 package com.maeyens.stan.travelsandco.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Stan on 12-Jun-16.
@@ -9,8 +11,13 @@ import java.util.List;
 public class DummyDAO implements TravelsandCoDAO {
     private static TravelsandCoDAO dao;
     private List<Transaction> transactions;
+    private Map<String, String> logins;
+    private String userID;
 
     private DummyDAO(){
+        logins = new HashMap<>();
+        logins.put("yrago09@gmail.com", "Stanflicka1");
+
         Transaction t1 = new Transaction(1, "extra in pot", 25, "Stan");
         Transaction t2 = new Transaction(2, "drinken", -12.25, "Thomas");
         transactions = new ArrayList<>();
@@ -23,6 +30,16 @@ public class DummyDAO implements TravelsandCoDAO {
             dao = new DummyDAO();
         }
         return dao;
+    }
+
+    @Override
+    public boolean checkLogin(String email, String pwd) {
+        return logins.containsKey(email) && logins.get(email).equals(pwd);
+    }
+
+    @Override
+    public void addLogin(String email, String pwd) {
+        logins.put(email, pwd);
     }
 
     @Override

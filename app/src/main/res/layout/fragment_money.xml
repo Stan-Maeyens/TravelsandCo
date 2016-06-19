@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.maeyens.stan.travelsandco.MoneyFragment">
+    tools:context=".money.MoneyFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout

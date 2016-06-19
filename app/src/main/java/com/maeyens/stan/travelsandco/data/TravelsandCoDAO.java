@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface TravelsandCoDAO {
 
+    public boolean checkLogin(String email, String pwd);
+    public void addLogin(String email, String pwd);
     public List<Transaction> getTransactions();
     public Transaction getTransaction(int id);
 }
