@@ -24,9 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
-        </activity>
+            android:name=".start.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name=".start.TravelPickerActivity"
+            android:label="@string/title_activity_travel_picker"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.maeyens.stan.travelsandco;
+package com.maeyens.stan.travelsandco.start;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,6 +30,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.maeyens.stan.travelsandco.NavigationActivity;
+import com.maeyens.stan.travelsandco.R;
 import com.maeyens.stan.travelsandco.data.DummyDAO;
 import com.maeyens.stan.travelsandco.data.SaveSharedPreference;
 import com.maeyens.stan.travelsandco.data.TravelsandCoDAO;
@@ -318,9 +320,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 SaveSharedPreference.setUserName(LoginActivity.this, mEmail);
-                Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-                startActivity(intent);
-                finish();
+                if(SaveSharedPreference.getCurrentTravel(LoginActivity.this).equals("")){
+                    Intent intent = new Intent(LoginActivity.this, TravelPickerActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -2,7 +2,12 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#727272</color>
+    <color name="colorIconsText">#FFFFFF</color>
+    <color name="colorDivider">#B6B6B6</color>
     <color name="positiveValue">#23C702</color>
     <color name="negativeValue">#FF0A0A</color>
 </resources>
