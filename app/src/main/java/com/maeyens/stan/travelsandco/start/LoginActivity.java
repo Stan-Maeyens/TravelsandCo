@@ -304,7 +304,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            System.out.println("--------------connecting");
             TravelsandCoDAO dao = NetworkDAO.getInstance(getApplicationContext());
             if(dao.checkLogin(mEmail, mPassword)){
                 return true;
