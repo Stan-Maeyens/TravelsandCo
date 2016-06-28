@@ -32,7 +32,7 @@ import android.widget.TextView;
 
 import com.maeyens.stan.travelsandco.NavigationActivity;
 import com.maeyens.stan.travelsandco.R;
-import com.maeyens.stan.travelsandco.data.DummyDAO;
+import com.maeyens.stan.travelsandco.data.NetworkDAO;
 import com.maeyens.stan.travelsandco.data.SaveSharedPreference;
 import com.maeyens.stan.travelsandco.data.TravelsandCoDAO;
 
@@ -304,7 +304,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            TravelsandCoDAO dao = DummyDAO.getInstance();
+            System.out.println("--------------connecting");
+            TravelsandCoDAO dao = NetworkDAO.getInstance(getApplicationContext());
             if(dao.checkLogin(mEmail, mPassword)){
                 return true;
             }
