@@ -1,6 +1,7 @@
 package com.maeyens.stan.travelsandco.start;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,13 +13,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.maeyens.stan.travelsandco.NavigationActivity;
 import com.maeyens.stan.travelsandco.R;
 import com.maeyens.stan.travelsandco.data.DummyDAO;
+import com.maeyens.stan.travelsandco.data.NetworkDAO;
 import com.maeyens.stan.travelsandco.data.SaveSharedPreference;
+import com.maeyens.stan.travelsandco.data.Travel;
+import com.maeyens.stan.travelsandco.data.TravelsandCoDAO;
+
+import java.util.List;
 
 public class TravelPickerActivity extends AppCompatActivity {
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
+    private LoadTravelsTask mTravelsTask = null;
+
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private TravelListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -38,8 +50,10 @@ public class TravelPickerActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //TODO: change this:
-        mAdapter = new TravelListAdapter(DummyDAO.getInstance().getTravels());
+        mAdapter = new TravelListAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        mTravelsTask = new LoadTravelsTask();
+        mTravelsTask.execute((Void) null);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,5 +98,36 @@ public class TravelPickerActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Represents an asynchronous load travels task
+     */
+    public class LoadTravelsTask extends AsyncTask<Void, Void, List<Travel>> {
+
+        LoadTravelsTask() {
+        }
+
+        @Override
+        protected List<Travel> doInBackground(Void... params) {
+            TravelsandCoDAO dao = NetworkDAO.getInstance(getApplicationContext());
+            return dao.getTravels();
+        }
+
+        @Override
+        protected void onPostExecute(final List<Travel> travels) {
+            mTravelsTask = null;
+            //showProgress(false);
+            int start = mAdapter.getItemCount();
+            mAdapter.addItems(travels);
+            for(Travel t : travels)
+            mAdapter.notifyItemRangeInserted(start-1, travels.size());
+        }
+
+        @Override
+        protected void onCancelled() {
+            mTravelsTask = null;
+            //showProgress(false);
+        }
     }
 }

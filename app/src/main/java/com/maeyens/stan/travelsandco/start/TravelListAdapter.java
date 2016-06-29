@@ -14,6 +14,7 @@ import com.maeyens.stan.travelsandco.R;
 import com.maeyens.stan.travelsandco.data.SaveSharedPreference;
 import com.maeyens.stan.travelsandco.data.Travel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,11 @@ import java.util.List;
  */
 public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.ViewHolder> {
     private static List<Travel> mDataset;
+
+    public TravelListAdapter() {
+        mDataset = new ArrayList<>();
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -71,14 +77,19 @@ public class TravelListAdapter extends RecyclerView.Adapter<TravelListAdapter.Vi
         holder.titleTextView.setText(mDataset.get(position).getTitle());
         String people = "";
         for(String s: mDataset.get(position).getPeople()){
-            people = s+" ,";
+            people += s+", ";
         }
-        holder.peopleTextView.setText(people.substring(0, people.length()-1));
+        System.out.println("people : "+people);
+        holder.peopleTextView.setText(people.substring(0, people.length()-2));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void addItems(List<Travel> travels){
+        mDataset.addAll(travels);
     }
 }

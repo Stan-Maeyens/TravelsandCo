@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.SocketHandler;
@@ -45,8 +46,10 @@ public class NetworkDAO implements TravelsandCoDAO {
 
     @Override
     public boolean checkLogin(String email, String pwd) {
+        openConnection();
         sendMessage(properties.getProperty("get_user") + ":" + email);
         String[] parts = readMessage();
+        closeConnection();
         if(parts[0].equals(email) && parts[1].equals(pwd))
             return true;
         else
@@ -55,14 +58,30 @@ public class NetworkDAO implements TravelsandCoDAO {
 
     @Override
     public boolean addLogin(String email, String pwd, String name) {
+        openConnection();
         sendMessage(properties.getProperty("add_user") + ":" + email + ":" + pwd + ":" + name);
         String[] parts = readMessage();
+        closeConnection();
         return Boolean.parseBoolean(parts[0]);
     }
 
     @Override
     public List<Travel> getTravels() {
-        return null;
+        List<Travel> ret = new ArrayList<>();
+        openConnection();
+        sendMessage(properties.getProperty("get_travels") + ":" + SaveSharedPreference.getUserName(context));
+        String[] parts = readMessage();
+        for(int i=0; i<Integer.parseInt(parts[0]); i++){
+            parts = readMessage();
+            List<String> p = new ArrayList<>();
+            for(int j=2; j<parts.length; j++){
+                p.add(parts[j]);
+            }
+            Travel t = new Travel(parts[0], parts[1], p);
+            ret.add(t);
+        }
+        closeConnection();
+        return ret;
     }
 
     @Override
@@ -101,7 +120,6 @@ public class NetworkDAO implements TravelsandCoDAO {
         buf.clear();
         buf.put(message.getBytes());
         buf.flip();
-        openConnection();
         while(buf.hasRemaining()) {
             try {
                 socketChannel.write(buf);
@@ -120,7 +138,6 @@ public class NetworkDAO implements TravelsandCoDAO {
             buf.flip();
             message = new String(buf.array()).trim();
             System.out.println("received message: "+message);
-            closeConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }
