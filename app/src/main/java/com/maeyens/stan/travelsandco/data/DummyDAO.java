@@ -10,13 +10,22 @@ import java.util.Map;
  */
 public class DummyDAO implements TravelsandCoDAO {
     private static TravelsandCoDAO dao;
+    private List<Travel> travels;
     private List<Transaction> transactions;
     private Map<String, String> logins;
-    private String userID;
 
     private DummyDAO(){
         logins = new HashMap<>();
         logins.put("yrago09@gmail.com", "Stanflicka1");
+
+        travels = new ArrayList<>();
+        List<String> people = new ArrayList<>();
+        people.add("person1");
+        people.add("person2");
+        Travel tv1 = new Travel("test1", "testtravel", people);
+        travels.add(tv1);
+        Travel tv2 = new Travel("test2", "testtravel2", people);
+        travels.add(tv2);
 
         Transaction t1 = new Transaction(1, "extra in pot", 25, "Stan");
         Transaction t2 = new Transaction(2, "drinken", -12.25, "Thomas");
@@ -38,8 +47,14 @@ public class DummyDAO implements TravelsandCoDAO {
     }
 
     @Override
-    public void addLogin(String email, String pwd) {
+    public boolean addLogin(String email, String pwd, String name) {
         logins.put(email, pwd);
+        return true;
+    }
+
+    @Override
+    public List<Travel> getTravels() {
+        return travels;
     }
 
     @Override

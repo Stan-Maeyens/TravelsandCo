@@ -1,4 +1,4 @@
-package com.maeyens.stan.travelsandco;
+package com.maeyens.stan.travelsandco.start;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,7 +30,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.maeyens.stan.travelsandco.data.DummyDAO;
+import com.maeyens.stan.travelsandco.NavigationActivity;
+import com.maeyens.stan.travelsandco.R;
+import com.maeyens.stan.travelsandco.data.NetworkDAO;
 import com.maeyens.stan.travelsandco.data.SaveSharedPreference;
 import com.maeyens.stan.travelsandco.data.TravelsandCoDAO;
 
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mNameView;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -79,6 +82,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+
+        mNameView = (EditText) findViewById(R.id.name);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -153,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String name = mNameView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -183,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password, name);
             mAuthTask.execute((Void) null);
         }
     }
@@ -294,21 +300,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private final String mName;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, String name) {
             mEmail = email;
             mPassword = password;
+            mName = name;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            TravelsandCoDAO dao = DummyDAO.getInstance();
+            TravelsandCoDAO dao = NetworkDAO.getInstance(getApplicationContext());
             if(dao.checkLogin(mEmail, mPassword)){
                 return true;
             }
-
-            dao.addLogin(mEmail, mPassword);
-            return true;
+            if(mName==null || mName.length()<3)
+                return false;
+            else
+                return dao.addLogin(mEmail, mPassword, mName);
         }
 
         @Override
@@ -318,12 +327,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 SaveSharedPreference.setUserName(LoginActivity.this, mEmail);
-                Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-                startActivity(intent);
-                finish();
+                if(SaveSharedPreference.getCurrentTravel(LoginActivity.this).equals("")){
+                    Intent intent = new Intent(LoginActivity.this, TravelPickerActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                if(mName.length()<3){
+                    mNameView.setError(getString(R.string.error_incorrect_name));
+                    mNameView.requestFocus();
+                }else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
             }
         }
 
