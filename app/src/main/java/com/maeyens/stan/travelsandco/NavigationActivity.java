@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import com.maeyens.stan.travelsandco.data.SaveSharedPreference;
 import com.maeyens.stan.travelsandco.money.MoneyFragment;
+import com.maeyens.stan.travelsandco.start.LoginActivity;
+import com.maeyens.stan.travelsandco.start.TravelPickerActivity;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,6 +26,10 @@ public class NavigationActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         if(SaveSharedPreference.getUserName(this).length() == 0){
             Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }else if(SaveSharedPreference.getCurrentTravel(this).length() == 0){
+            Intent intent = new Intent(this, TravelPickerActivity.class);
             startActivity(intent);
             finish();
         }
