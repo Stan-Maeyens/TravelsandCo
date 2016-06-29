@@ -47,8 +47,9 @@ public class DummyDAO implements TravelsandCoDAO {
     }
 
     @Override
-    public void addLogin(String email, String pwd) {
+    public boolean addLogin(String email, String pwd, String name) {
         logins.put(email, pwd);
+        return true;
     }
 
     @Override
